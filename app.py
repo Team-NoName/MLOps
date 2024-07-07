@@ -43,12 +43,13 @@ st.write(np.isinf(scaled_features).sum())
 linked = linkage(scaled_features, method='ward')
 
 # Plot the dendrogram
-plt.figure(figsize=(10, 7))
+fig = plt.figure(figsize=(10, 7))
 dendrogram(linked, orientation='top', distance_sort='descending', show_leaf_counts=True)
 plt.title('Dendrogram')
 plt.xlabel('Customers')
 plt.ylabel('Euclidean distances')
-plt.show()
+#plt.show()
+st.pyplot(fig)
 
 # Fit the Agglomerative Clustering model
 agg_clustering = AgglomerativeClustering(n_clusters=5, affinity='euclidean', linkage='ward')
@@ -62,12 +63,13 @@ pca = PCA(n_components=2)
 pca_features = pca.fit_transform(scaled_features)
 
 # Plot the clusters
-plt.figure(figsize=(10, 7))
+fig2 = plt.figure(figsize=(10, 7))
 sns.scatterplot(x=pca_features[:, 0], y=pca_features[:, 1], hue=data['Cluster'], palette='viridis')
 plt.title('Agglomerative Clustering')
 plt.xlabel('Principal Component 1')
 plt.ylabel('Principal Component 2')
-plt.show()
+# plt.show()
+st.pyplot(fig)
 
 # Compute the cluster centers (only for numeric columns)
 numeric_cols = features.columns
@@ -77,14 +79,15 @@ cluster_centers = data.groupby('Cluster')[numeric_cols].mean()
 st.write(cluster_centers)
 
 # Set the plot size
-plt.figure(figsize=(14, 8))
+fig3 = plt.figure(figsize=(14, 8))
 
 # Create a heatmap for the cluster centers
 sns.heatmap(cluster_centers, annot=True, cmap="viridis", linewidths=.5)
 plt.title('Cluster Centers Heatmap')
 plt.xlabel('Features')
 plt.ylabel('Clusters')
-plt.show()
+# plt.show()
+st.pyplot(fig3)
 
 from sklearn.datasets import make_classification
 from sklearn.model_selection import train_test_split
