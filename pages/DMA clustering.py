@@ -4,6 +4,7 @@ import streamlit as st
 st.title("MLOps")
 
 import matplotlib.pyplot as plt
+import pandas as pd
 
 df = pd.read_csv('https://raw.githubusercontent.com/Team-NoName/MLOps/main/static/CC_general.csv')
 # Removing full row if any attribute is missing.
@@ -11,8 +12,6 @@ df.dropna(inplace = True)
 df.shape
 
 df = df.iloc[:, 1:]
-
-import pandas as pd
 
 df.fillna(df.mean(), inplace=True)
 
