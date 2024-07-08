@@ -1,7 +1,7 @@
 # Import streamlit application
 import streamlit as st
 
-st.title("MLOps")
+st.title("DMA Clustering")
 
 import matplotlib.pyplot as plt
 import pandas as pd
