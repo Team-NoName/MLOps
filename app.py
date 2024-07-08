@@ -1,43 +1,42 @@
-# Import streamlit application
 import streamlit as st
-
-st.title("MLOps")
-
-import numpy as np # linear algebra
-import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
-
-import pandas as pd
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import AgglomerativeClustering
 from scipy.cluster.hierarchy import dendrogram, linkage
 from sklearn.decomposition import PCA
+from sklearn.datasets import make_classification
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import f1_score
 
-data_path = "static/CC_general.csv"
+# Title of the application
+st.title("MLOps")
+
+# Load and display the dataset
+data_path = "https://raw.githubusercontent.com/Team-NoName/MLOps/main/static/CC_general.csv"
 data = pd.read_csv(data_path)
 st.write(data.head())
 
 # Handling missing values (if any)
-data.fillna(data.mode(), inplace=True)
+data.fillna(data.mode().iloc[0], inplace=True)
 data.fillna(data["CREDIT_LIMIT"].mode()[0], inplace=True)
-
 
 # Selecting relevant features for clustering
 features = data[['BALANCE', 'BALANCE_FREQUENCY', 'PURCHASES',
-       'ONEOFF_PURCHASES', 'INSTALLMENTS_PURCHASES', 'CASH_ADVANCE',
-       'PURCHASES_FREQUENCY', 'ONEOFF_PURCHASES_FREQUENCY',
-       'PURCHASES_INSTALLMENTS_FREQUENCY', 'CASH_ADVANCE_FREQUENCY', 'CREDIT_LIMIT', 'PAYMENTS',
-       ]]
-features.dropna()
+                 'ONEOFF_PURCHASES', 'INSTALLMENTS_PURCHASES', 'CASH_ADVANCE',
+                 'PURCHASES_FREQUENCY', 'ONEOFF_PURCHASES_FREQUENCY',
+                 'PURCHASES_INSTALLMENTS_FREQUENCY', 'CASH_ADVANCE_FREQUENCY', 'CREDIT_LIMIT', 'PAYMENTS']]
+features.dropna(inplace=True)
 
 # Scaling the features
 scaler = StandardScaler()
 scaled_features = scaler.fit_transform(features)
 
-st.write(np.isnan(scaled_features).sum())
-st.write(np.isinf(scaled_features).sum())
+st.write(f"NaN values: {np.isnan(scaled_features).sum()}")
+st.write(f"Infinity values: {np.isinf(scaled_features).sum()}")
 
 # Compute the linkage matrix
 linked = linkage(scaled_features, method='ward')
@@ -48,7 +47,6 @@ dendrogram(linked, orientation='top', distance_sort='descending', show_leaf_coun
 plt.title('Dendrogram')
 plt.xlabel('Customers')
 plt.ylabel('Euclidean distances')
-#plt.show()
 st.pyplot(fig)
 
 # Fit the Agglomerative Clustering model
@@ -68,8 +66,7 @@ sns.scatterplot(x=pca_features[:, 0], y=pca_features[:, 1], hue=data['Cluster'],
 plt.title('Agglomerative Clustering')
 plt.xlabel('Principal Component 1')
 plt.ylabel('Principal Component 2')
-# plt.show()
-st.pyplot(fig)
+st.pyplot(fig2)
 
 # Compute the cluster centers (only for numeric columns)
 numeric_cols = features.columns
@@ -86,13 +83,7 @@ sns.heatmap(cluster_centers, annot=True, cmap="viridis", linewidths=.5)
 plt.title('Cluster Centers Heatmap')
 plt.xlabel('Features')
 plt.ylabel('Clusters')
-# plt.show()
 st.pyplot(fig3)
-
-from sklearn.datasets import make_classification
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import f1_score
 
 # Create a synthetic dataset
 X, y = make_classification(n_samples=1000, n_features=20, n_classes=2, random_state=42)
