@@ -16,20 +16,21 @@ from sklearn.metrics import f1_score
 st.title("MLOps")
 
 # Load and display the dataset
-data_path = "https://raw.githubusercontent.com/Team-NoName/MLOps/main/static/CC_general.csv"
+data_path = "static/CC_general.csv"
 data = pd.read_csv(data_path)
 st.write(data.head())
 
 # Handling missing values (if any)
-data.fillna(data.mode().iloc[0], inplace=True)
+data.fillna(data.mode(), inplace=True)
 data.fillna(data["CREDIT_LIMIT"].mode()[0], inplace=True)
 
 # Selecting relevant features for clustering
 features = data[['BALANCE', 'BALANCE_FREQUENCY', 'PURCHASES',
-                 'ONEOFF_PURCHASES', 'INSTALLMENTS_PURCHASES', 'CASH_ADVANCE',
-                 'PURCHASES_FREQUENCY', 'ONEOFF_PURCHASES_FREQUENCY',
-                 'PURCHASES_INSTALLMENTS_FREQUENCY', 'CASH_ADVANCE_FREQUENCY', 'CREDIT_LIMIT', 'PAYMENTS']]
-features.dropna(inplace=True)
+       'ONEOFF_PURCHASES', 'INSTALLMENTS_PURCHASES', 'CASH_ADVANCE',
+       'PURCHASES_FREQUENCY', 'ONEOFF_PURCHASES_FREQUENCY',
+       'PURCHASES_INSTALLMENTS_FREQUENCY', 'CASH_ADVANCE_FREQUENCY', 'CREDIT_LIMIT', 'PAYMENTS',
+       ]]
+features.dropna()
 
 # Scaling the features
 scaler = StandardScaler()
